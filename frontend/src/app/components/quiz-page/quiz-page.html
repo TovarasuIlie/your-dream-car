@@ -1,0 +1,146 @@
+<main
+    class="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 py-12 px-4 transition-colors duration-300 flex flex-col items-center">
+
+    <div class="w-full max-w-3xl">
+
+        <!-- Buton Întoarcere și Bară de Progres -->
+        <div class="mb-8">
+            <button routerLink="/"
+                class="inline-flex items-center text-sm font-semibold text-slate-500 hover:text-slate-900 dark:hover:text-white mb-6 transition-colors focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Înapoi
+            </button>
+
+            <!-- Progress Bar -->
+            <div
+                class="flex justify-between text-xs font-bold text-slate-400 dark:text-slate-500 mb-2 uppercase tracking-wider">
+                <span>Pasul {{ currentStep() + 1 }} din {{ questions().length }}</span>
+                <span>{{ progressPercentage() }}% Completat</span>
+            </div>
+            <div class="w-full h-2.5 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+                <div class="h-full bg-blue-600 dark:bg-blue-500 rounded-full transition-all duration-500 ease-out"
+                    [style.width.%]="progressPercentage()">
+                </div>
+            </div>
+        </div>
+
+        <!-- Cardul Întrebării -->
+        <div
+            class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 md:p-10 shadow-xl shadow-slate-200/50 dark:shadow-none transition-all min-h-125 flex flex-col">
+
+            @if (currentQuestion(); as question) {
+            <!-- Header Întrebare -->
+            <div class="mb-8 text-center">
+                <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white mb-3">
+                    {{ question.title }}
+                </h2>
+                <p class="text-slate-500 dark:text-slate-400">
+                    {{ question.subtitle }}
+                </p>
+            </div>
+
+            <!-- Grid Opțiuni -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                @for (option of question.options; track option.id) {
+                <button (click)="selectOption(question.id, option.id)"
+                    class="relative flex flex-col items-center justify-center p-6 rounded-2xl border-2 text-center transition-all duration-200 focus:outline-none group"
+                    [ngClass]="{
+                        'border-blue-600 bg-blue-50/50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 shadow-md scale-[1.02]': isOptionSelected(question.id, option.id),
+                        'border-slate-200 dark:border-slate-700 hover:border-blue-400 dark:hover:border-blue-500 hover:bg-slate-50 dark:hover:bg-slate-800/50': !isOptionSelected(question.id, option.id)
+                    }">
+
+                    <span class="font-bold text-lg mb-1"
+                        [ngClass]="isOptionSelected(question.id, option.id) ? 'text-blue-700 dark:text-blue-400' : 'text-slate-900 dark:text-white'">
+                        {{ option.label }}
+                    </span>
+
+                    @if (option.description) {
+                    <span class="text-xs"
+                        [ngClass]="isOptionSelected(question.id, option.id) ? 'text-blue-600/80 dark:text-blue-300/80' : 'text-slate-500'">
+                        {{ option.description }}
+                    </span>
+                    }
+
+                    <!-- Bifă de selecție -->
+                    @if (isOptionSelected(question.id, option.id)) {
+                    <div class="absolute top-3 right-3 text-blue-600 dark:text-blue-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    }
+                </button>
+                }
+            </div>
+
+            <!-- NOU: Secțiunea de Scor / Importanță (Apare doar după ce alege o opțiune) -->
+            @if (answers()[question.id]) {
+            <div class="mt-6 mb-8 pt-6 border-t border-slate-100 dark:border-slate-800 animate-[fadeIn_0.4s_ease-out]">
+                <div class="text-center mb-4">
+                    <h3 class="font-bold text-slate-900 dark:text-white">Cât de important este acest criteriu pentru
+                        tine?</h3>
+                    <p class="text-xs text-slate-500 mt-1">Acordă un scor pentru a ne ajuta să prioritizăm opțiunile.
+                    </p>
+                </div>
+
+                <div class="flex flex-col sm:flex-row items-center gap-2 justify-center">
+                    <span class="text-xs font-semibold text-slate-400 hidden sm:block w-16 text-right">Flexibil</span>
+
+                    <!-- Butoanele de la 1 la 5 -->
+                    <div class="flex gap-2">
+                        @for (weight of [1, 2, 3, 4, 5]; track weight) {
+                        <button (click)="setWeight(question.id, weight)"
+                            class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl font-black text-lg transition-all duration-200 flex items-center justify-center focus:outline-none"
+                            [ngClass]="{
+                    'bg-blue-600 text-white shadow-md scale-110 -translate-y-1': answers()[question.id]?.weight === weight,
+                    'bg-slate-100 dark:bg-slate-800 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700': answers()[question.id]?.weight !== weight
+                }">
+                            {{ weight }}
+                        </button>
+                        }
+                    </div>
+
+                    <span class="text-xs font-semibold text-slate-400 hidden sm:block w-16 text-left">Esențial</span>
+                </div>
+
+                <!-- Label text care explică selecția pe baza weight-ului salvat în question -->
+                <div class="text-center mt-3 text-sm font-bold text-blue-600 dark:text-blue-400">
+                    {{ getWeightLabel(question.weight) }}
+                </div>
+            </div>
+            }
+            }
+
+            <!-- Navigare (Butoane Back / Next / Submit) -->
+            <div class="flex items-center justify-between pt-6 mt-auto">
+                <button (click)="prevStep()" [disabled]="currentStep() === 0"
+                    class="px-6 py-3 rounded-xl font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors disabled:opacity-30 disabled:hover:bg-transparent">
+                    Înapoi
+                </button>
+
+                @if (isLastStep()) {
+                <button (click)="submitQuiz()" [disabled]="!hasAnsweredCurrent()"
+                    class="px-8 py-3 rounded-xl font-bold bg-green-600 hover:bg-green-700 text-white shadow-lg shadow-green-600/30 transition-all active:scale-95 disabled:opacity-50 disabled:active:scale-100">
+                    Vezi Rezultatele
+                </button>
+                } @else {
+                <button (click)="nextStep()" [disabled]="!hasAnsweredCurrent()"
+                    class="px-8 py-3 rounded-xl font-bold bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/30 transition-all active:scale-95 disabled:opacity-50 disabled:active:scale-100 flex items-center gap-2">
+                    <span>Următorul</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </button>
+                }
+            </div>
+
+        </div>
+    </div>
+</main>

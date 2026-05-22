@@ -1,0 +1,178 @@
+<main class="min-h-screen bg-slate-50 dark:bg-slate-950 pt-10 pb-20 px-4 transition-colors duration-300">
+    <div class="max-w-5xl mx-auto">
+
+        <!-- Titlu Pagina -->
+        <h1 class="text-3xl font-extrabold text-slate-900 dark:text-white mb-8">Contul meu</h1>
+
+        <!-- Stare de Loading -->
+        @if (isLoading()) {
+        <div class="animate-pulse space-y-8">
+            <!-- Skeleton Header Profil -->
+            <div
+                class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row gap-6 items-center">
+                <div class="w-24 h-24 bg-slate-200 dark:bg-slate-800 rounded-full"></div>
+                <div class="flex flex-col gap-3 items-center md:items-start flex-1">
+                    <div class="w-48 h-6 bg-slate-200 dark:bg-slate-800 rounded-full"></div>
+                    <div class="w-32 h-4 bg-slate-200 dark:bg-slate-800 rounded-full"></div>
+                </div>
+                <div class="w-32 h-10 bg-slate-200 dark:bg-slate-800 rounded-xl"></div>
+            </div>
+
+            <!-- Skeleton Grila Chestionare -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                @for (i of [1, 2]; track i) {
+                <div class="h-48 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800">
+                </div>
+                }
+            </div>
+        </div>
+        }
+
+        <!-- Afișare Date Reale -->
+        @else {
+
+        @if (user(); as profile) {
+        <!-- Card Date Profil -->
+        <div
+            class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm mb-10 flex flex-col md:flex-row items-center gap-8 relative overflow-hidden">
+
+            <!-- Formă de design abstractă în background -->
+            <div class="absolute -right-10 -top-10 w-40 h-40 bg-blue-50 dark:bg-blue-900/10 rounded-full blur-3xl">
+            </div>
+
+            <!-- Avatar Mare -->
+            <div
+                class="w-24 h-24 rounded-full bg-linear-to-tr from-blue-600 to-indigo-500 text-white flex items-center justify-center font-black text-4xl shadow-xl shadow-blue-600/30 shrink-0 relative z-10">
+                {{ profile.name.charAt(0) }}
+            </div>
+
+            <!-- Info Profil -->
+            <div class="flex-1 text-center md:text-left relative z-10">
+                <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white">{{ profile.name }}</h2>
+                <p
+                    class="text-slate-500 dark:text-slate-400 flex items-center justify-center md:justify-start gap-1.5 mt-1.5">
+                    <span class="material-icons text-sm">email</span>
+                    {{ profile.email }}
+                </p>
+            </div>
+
+            <!-- Statistici rapide & Edit -->
+            <div class="flex flex-col sm:flex-row items-center gap-4 relative z-10 w-full md:w-auto mt-4 md:mt-0">
+                <div class="flex items-center gap-4 text-center">
+                    <div class="flex flex-col px-4">
+                        <span class="text-xs text-slate-500 font-medium">Trimise</span>
+                        <span class="text-xl font-black text-slate-900 dark:text-white">{{ quizzes().length }}</span>
+                    </div>
+                    <div class="w-px h-8 bg-slate-200 dark:bg-slate-800"></div>
+                    <div class="flex flex-col px-4">
+                        <span class="text-xs text-slate-500 font-medium">Rezolvate</span>
+                        <span class="text-xl font-black text-green-600 dark:text-green-400">{{ resolvedCount }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
+
+        <!-- Grila Chestionare -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            @for (quiz of quizzes(); track quiz.id) {
+            <div
+                class="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group relative overflow-hidden">
+
+                <!-- Element de design subtil pentru un aspect prietenos -->
+                <div
+                    class="absolute -right-4 -top-4 w-24 h-24 rounded-full bg-slate-50 dark:bg-slate-800/50 -z-10 group-hover:scale-110 transition-transform duration-500">
+                </div>
+
+                <!-- Header Card -->
+                <div class="flex justify-between items-start mb-4 z-10">
+                    <div>
+                        <h4
+                            class="font-bold text-lg text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                            Cererea ta #{{ quiz.id }}
+                        </h4>
+                        <p class="text-xs font-medium text-slate-500 flex items-center gap-1 mt-1">
+                            <span class="material-icons text-[14px]">calendar_today</span>
+                            Trimisă pe {{ quiz.createdAt | date:'dd MMM yyyy' }}
+                        </p>
+                    </div>
+
+                    <!-- Badge Status Premium -->
+                    @if (quiz.isActive) {
+                    <span
+                        class="flex items-center gap-1.5 bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400 px-3 py-1.5 rounded-full text-xs font-bold border border-blue-100 dark:border-blue-800/50 shadow-sm">
+                        <span class="material-icons text-[14px] animate-pulse">support_agent</span>
+                        Se analizează
+                    </span>
+                    } @else {
+                    <span
+                        class="flex items-center gap-1.5 bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400 px-3 py-1.5 rounded-full text-xs font-bold border border-green-200 dark:border-green-800/50 shadow-sm">
+                        <span class="material-icons text-[14px]">auto_awesome</span>
+                        Finalizat
+                    </span>
+                    }
+                </div>
+
+                <!-- Mesaj prietenos pentru client (în loc de nume/email) -->
+                <div class="mt-2 mb-6 z-10 grow">
+                    @if (quiz.isActive) {
+                    <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                        Experții noștri îți analizează preferințele chiar acum. Îți vom oferi recomandările ideale în
+                        cel
+                        mai
+                        scurt timp!
+                    </p>
+                    } @else {
+                    <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                        Analiza ta este gata! Am găsit opțiunile perfecte care se potrivesc bugetului și stilului tău de
+                        viață.
+                    </p>
+                    }
+                </div>
+
+                <!-- Buton Contextual -->
+                <div class="mt-auto pt-2 z-10">
+                    @if (quiz.isActive) {
+                    <button (click)="handleOpenQuizModal(quiz.id)"
+                        class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold text-sm rounded-xl transition-colors focus:outline-none flex justify-center items-center gap-2">
+                        Revizuiește răspunsurile tale
+                    </button>
+                    } @else {
+                    <button (click)="handleOpenQuizModal(quiz.id)"
+                        class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-xl transition-all shadow-lg shadow-blue-600/30 focus:outline-none flex justify-center items-center gap-2 group-hover:-translate-y-0.5">
+                        Vezi rezultatul evaluării
+                        <span
+                            class="material-icons text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                    </button>
+                    }
+                </div>
+
+            </div>
+            }
+
+            <!-- Stare Goală -->
+            @empty {
+            <div
+                class="col-span-full py-12 flex flex-col items-center justify-center bg-white dark:bg-slate-900 rounded-3xl border border-dashed border-slate-300 dark:border-slate-700">
+                <div
+                    class="w-16 h-16 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center mb-4">
+                    <span class="material-icons text-3xl">directions_car</span>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Nicio evaluare momentan</h3>
+                <p class="text-slate-500 dark:text-slate-400 mt-1 text-center max-w-sm mb-6">Completează primul tău
+                    chestionar
+                    și lasă-ne să găsim mașina perfectă pentru tine.</p>
+                <button [routerLink]="['/chestionar']"
+                    class="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-full shadow-lg shadow-blue-600/30 transition-all flex items-center gap-2">
+                    <span>Începe evaluarea gratuită</span>
+                    <span class="material-icons text-sm">east</span>
+                </button>
+            </div>
+            }
+        </div>
+
+        }
+    </div>
+
+    <app-view-response-modal [isOpen]="isQuizModalOpen" [quizId]="quizIdSelected()" (close)="handleCloseQuizModal()" />
+</main>

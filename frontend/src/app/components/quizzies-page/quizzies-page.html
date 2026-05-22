@@ -1,0 +1,128 @@
+<main class="min-h-screen bg-slate-50 dark:bg-slate-950 pt-10 pb-20 px-4 transition-colors duration-300">
+    <div class="max-w-6xl mx-auto">
+
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+            <div>
+                <h1 class="text-3xl font-extrabold text-slate-900 dark:text-white">Lista Chestionare</h1>
+                <p class="text-slate-500 dark:text-slate-400 mt-1">Gestionează toate chestionarele create în platformă.
+                </p>
+            </div>
+        </div>
+
+        <!-- Container Tabel -->
+        <div
+            class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+
+                    <!-- Capul de tabel (Redus la 4 coloane) -->
+                    <thead>
+                        <tr
+                            class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800 text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold">
+                            <th class="px-6 py-4">Creator</th>
+                            <th class="px-6 py-4">Data Creării</th>
+                            <th class="px-6 py-4">Status</th>
+                            <th class="px-6 py-4 text-right">Acțiuni</th>
+                        </tr>
+                    </thead>
+
+                    <!-- Corpul tabelului -->
+                    <tbody class="divide-y divide-slate-100 dark:divide-slate-800/50">
+
+                        <!-- Stare de Încărcare (Skeleton Loader) -->
+                        @if (isLoading()) {
+                        @for (i of [1, 2, 3, 4]; track i) {
+                        <tr class="animate-pulse bg-white dark:bg-slate-900">
+                            <td class="px-6 py-4">
+                                <div class="h-4 bg-slate-200 dark:bg-slate-800 rounded w-1/2 mb-2"></div>
+                                <div class="h-3 bg-slate-200 dark:bg-slate-800 rounded w-2/3"></div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="h-4 bg-slate-200 dark:bg-slate-800 rounded w-24"></div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="h-6 bg-slate-200 dark:bg-slate-800 rounded-full w-16"></div>
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                <div class="h-8 bg-slate-200 dark:bg-slate-800 rounded-lg w-20 ml-auto"></div>
+                            </td>
+                        </tr>
+                        }
+                        }
+
+                        <!-- Afișare Date Reale -->
+                        @else {
+                        @for (quiz of quizzes(); track quiz.id) {
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors group">
+
+                            <!-- Nume & Email -->
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3">
+                                    <!-- Avatar cu inițiala numelui -->
+                                    <div
+                                        class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 flex items-center justify-center font-bold text-xs">
+                                        {{ quiz.name.charAt(0) }}
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-semibold text-slate-900 dark:text-white">{{ quiz.name }}
+                                        </p>
+                                        <p class="text-xs text-slate-500">{{ quiz.email }}</p>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <!-- Data Creării -->
+                            <td class="px-6 py-4">
+                                <p class="text-sm text-slate-700 dark:text-slate-300 whitespace-nowrap">
+                                    {{ quiz.createdAt | date:'dd MMM yyyy' }}
+                                </p>
+                                <p class="text-xs text-slate-500">
+                                    {{ quiz.createdAt | date:'HH:mm' }}
+                                </p>
+                            </td>
+
+                            <!-- Status (isActive) -->
+                            <td class="px-6 py-4">
+                                <span
+                                    class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-bold rounded-full"
+                                    [ngClass]="getStatusClass(quiz.isActive)">
+                                    <span class="w-1.5 h-1.5 rounded-full"
+                                        [ngClass]="quiz.isActive ? 'bg-green-500' : 'bg-slate-400'"></span>
+                                    {{ getStatusLabel(quiz.isActive) }}
+                                </span>
+                            </td>
+
+                            <!-- Acțiuni -->
+                            <td class="px-6 py-4 text-right whitespace-nowrap">
+                                <button
+                                    [routerLink]="['vezi-chestionar', quiz.id]"
+                                    class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-semibold text-sm px-3 py-1.5 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors focus:outline-none">
+                                    Vezi detalii
+                                </button>
+                            </td>
+                        </tr>
+                        }
+
+                        <!-- Rând afișat dacă array-ul e gol (Atenție: colspan e 4 acum) -->
+                        @empty {
+                        <tr>
+                            <td colspan="4" class="px-6 py-12 text-center">
+                                <div class="flex flex-col items-center justify-center">
+                                    <span
+                                        class="material-icons text-5xl text-slate-300 dark:text-slate-600 mb-3">inbox</span>
+                                    <h3 class="text-base font-bold text-slate-900 dark:text-white">Niciun chestionar
+                                        găsit</h3>
+                                    <p class="text-sm text-slate-500 mt-1">Nu există chestionare de afișat în acest
+                                        moment.</p>
+                                </div>
+                            </td>
+                        </tr>
+                        }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>

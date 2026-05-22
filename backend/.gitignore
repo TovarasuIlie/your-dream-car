@@ -1,0 +1,48 @@
+## ----------------------------------------------------------------------
+## .NET / C# / ASP.NET Core
+## ----------------------------------------------------------------------
+
+# Foldere de build (compilare)
+[Bb]in/
+[Oo]bj/
+
+# Fisiere generate de Visual Studio / IDE-uri
+.vs/
+*.user
+*.userosscache
+*.sln.docstates
+*.suo
+
+# Fisiere de log si cache
+*.log
+*.cache
+
+# Pachete NuGet (daca le descarci local in folder)
+packages/
+*.nupkg
+
+# Fisiere specifice mediului de dezvoltare local
+appsettings.Local.json
+
+# Secrete utilizator (daca folosesti user secrets local)
+secrets.json
+
+## ----------------------------------------------------------------------
+## OS (Sistem de operare)
+## ----------------------------------------------------------------------
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+## ----------------------------------------------------------------------
+## Diverse
+## ----------------------------------------------------------------------
+# Fisiere de crash
+CrashReport.txt

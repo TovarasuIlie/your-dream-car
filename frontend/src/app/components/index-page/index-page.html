@@ -1,0 +1,159 @@
+<section
+    class="relative bg-linear-to-tr from-slate-100 via-blue-50 to-indigo-100 dark:from-slate-950 dark:via-blue-900 dark:to-indigo-950 text-slate-900 dark:text-white py-24 px-4 transition-colors duration-300 overflow-hidden">
+
+    <!-- Elemente decorative de fundal (opțional, oferă adâncime) -->
+    <div class="absolute top-0 left-1/4 w-96 h-96 bg-blue-400/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="container mx-auto text-center max-w-3xl relative z-10">
+
+        <!-- Header Text -->
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 tracking-tight">
+            Găsește Mașina Perfectă Pentru Tine
+        </h1>
+        <p class="text-slate-600 dark:text-blue-200/80 text-lg md:text-xl mb-12">
+            Nu pierde timpul căutând manual prin mii de oferte. Spune-ne ce contează pentru tine, iar noi îți aducem
+            cele mai bune variante direct pe ecran.
+        </p>
+
+        <!-- Glass Card pentru Chestionar -->
+        <div
+            class="bg-white/40 dark:bg-white/10 backdrop-blur-xl border border-white/40 dark:border-white/20 rounded-3xl p-8 md:p-12 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] relative overflow-hidden max-w-2xl mx-auto">
+
+            <div class="mb-8">
+                <div
+                    class="w-16 h-16 bg-blue-100 dark:bg-blue-900/50 rounded-2xl flex items-center justify-center mx-auto mb-6 text-blue-600 dark:text-blue-400 shadow-inner">
+                    <!-- Iconiță sugestivă (baghetă magică / setări) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                    </svg>
+                </div>
+                <h2 class="text-2xl md:text-3xl font-bold mb-3 text-slate-900 dark:text-white">
+                    Ce mașină ți se potrivește?
+                </h2>
+                <p class="text-slate-600 dark:text-slate-300">
+                    Durează mai puțin de 2 minute. Completează quiz-ul și primești instant o listă scurtă cu oferte
+                    personalizate pe bugetul și stilul tău de viață.
+                </p>
+            </div>
+
+            <!-- Butonul CTA (Call to Action) -->
+            <!-- NOTĂ: Schimbă routerLink="/chestionar" cu ruta ta reală din Angular -->
+            <button [routerLink]="['/chestionar']"
+                class="group w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-4 rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_25px_rgba(37,99,235,0.5)]">
+                <span>Începe Chestionarul</span>
+                <!-- Săgeată care se animă la hover -->
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5 transform group-hover:translate-x-1 transition-transform duration-300" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+            </button>
+
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-4">
+                100% Gratuit • Fără obligații
+            </p>
+
+        </div>
+    </div>
+</section>
+
+<main
+    class="container mx-auto px-4 py-12 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300">
+
+    <section class="mb-16">
+        <div class="mb-8">
+            <h1 class="text-3xl font-extrabold mb-2">Configurează mașina</h1>
+            <p class="text-slate-500 dark:text-slate-400">Selectează marca dorită pentru a începe.</p>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            @for (brand of availableBrands(); track brand.id) {
+            <button
+                class="group relative flex flex-col items-center justify-center p-6 bg-white dark:bg-slate-900 rounded-xl border-2 transition-all duration-300 border-slate-200 dark:border-slate-800 hover:border-blue-400 dark:hover:border-blue-600 hover:shadow-sm">
+
+                <div
+                    class="w-16 h-16 mb-4 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+                    <img [src]="brand.logoUrl" [alt]="'Logo ' + brand.name"
+                        class="max-w-full max-h-full object-contain drop-shadow-sm" loading="lazy" />
+                </div>
+
+                <span class="font-semibold text-sm transition-colors duration-300">
+                    {{ brand.name }}
+                </span>
+            </button>
+            }
+        </div>
+    </section>
+
+    <hr class="border-slate-200 dark:border-slate-800 mb-12" />
+
+    <section>
+        <div class="flex items-end justify-between mb-8">
+            <div>
+                <h2 class="text-2xl font-bold mb-1">Top Modele Populare</h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Cele mai căutate și apreciate configurații</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            @for (model of popularModels(); track model.id) {
+            <div
+                class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 ease-in-out hover:scale-105 overflow-hidden flex flex-col">
+
+                <!-- Am modificat h-48 în h-64 pentru o imagine mai înaltă -->
+                <div class="relative h-64 w-full bg-slate-100 dark:bg-slate-800">
+                    <img [src]="model.imageUrl" [alt]="model.name" class="w-full h-full object-cover" loading="lazy">
+                    <div
+                        class="absolute top-4 left-4 bg-linear-to-r from-amber-500 to-yellow-400 text-white font-black text-sm px-3 py-1 rounded-full shadow-md border border-yellow-300/50">
+                        #{{ model.rank }} în Top
+                    </div>
+                </div>
+
+                <div class="p-6 grow flex flex-col">
+                    <div class="mb-6">
+                        <h3 class="text-xl font-extrabold text-slate-900 dark:text-white mb-2">{{ model.name }}</h3>
+
+                        <div class="flex items-center gap-2">
+                            <div class="flex text-amber-400">
+                                @for (star of [1, 2, 3, 4, 5]; track star) {
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
+                                    [ngClass]="star <= model.rating ? 'fill-current' : 'text-slate-300 dark:text-slate-700'"
+                                    viewBox="0 0 20 20" fill="currentColor">
+                                    <path
+                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                }
+                            </div>
+                            <span class="text-sm font-bold">{{ model.rating | number:'1.1-1' }}</span>
+                            <span class="text-xs text-slate-400">({{ model.reviewCount }} recenzii)</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4 grow">
+                        @for (spec of model.specs; track spec.name) {
+                        <div>
+                            <div class="flex justify-between items-end mb-1">
+                                <span class="text-xs font-semibold uppercase text-slate-500 dark:text-slate-400">{{
+                                    spec.name }}</span>
+                                <span class="text-sm font-bold text-slate-700 dark:text-slate-200">{{ spec.textValue
+                                    }}</span>
+                            </div>
+                            <!-- Containerul barei de progres -->
+                            <div class="w-full h-2.5 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+                                <!-- Bara propriu-zisă: am scos spec.colorClass și am adăugat bg-slate-900 dark:bg-white -->
+                                <div class="h-full rounded-full transition-all duration-1000 ease-out bg-slate-900 dark:bg-white"
+                                    [style.width.%]="spec.score">
+                                </div>
+                            </div>
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+    </section>
+</main>
