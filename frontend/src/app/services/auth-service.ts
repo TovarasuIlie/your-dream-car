@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, OnInit } from '@angular/core';
 import { LoginForm, RegisterForm } from '../models/auth-form';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 import { LoggedUser } from '../models/logged-user';
 import { Router } from '@angular/router';
 import { map, ReplaySubject } from 'rxjs';
