@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sql_database
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=SuperStrong!Password123 
+    ports:
+      - "14333:1433" 
+    volumes:
+      - sql_data:/var/opt/mssql 
+
+  api:
+    build: 
+      context: ./backend 
+    image: rares/asp-backend:latest
+    container_name: aspnet_backend
+    environment:
+      - ConnectionStrings__LocalConnectionString=Server=db,1433;Database=ProjectDatabase;User Id=sa;Password=SuperStrong!Password123;TrustServerCertificate=True;
+      - ASPNETCORE_ENVIRONMENT=Production
+    ports:
+      - "5000:8080"
+    depends_on:
+      - db
+
+  web:
+    build: 
+      context: ./frontend
+    image: rares/angular-frontend:latest
+    container_name: angular_frontend
+    ports:
+      - "8181:8181"
+    depends_on:
+      - api
+
+volumes:
+  sql_data:
