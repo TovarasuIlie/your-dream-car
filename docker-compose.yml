@@ -15,7 +15,6 @@ services:
   api:
     build: 
       context: ./backend 
-    image: rares/asp-backend:latest
     container_name: aspnet_backend
     environment:
       - ConnectionStrings__LocalConnectionString=Server=db,1433;Database=ProjectDatabase;User Id=sa;Password=SuperStrong!Password123;TrustServerCertificate=True;
@@ -28,7 +27,6 @@ services:
   web:
     build: 
       context: ./frontend
-    image: rares/angular-frontend:latest
     container_name: angular_frontend
     ports:
       - "8181:8181"
